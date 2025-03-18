@@ -1,0 +1,48 @@
+BGP Monitoring with Arista eAPI
+
+This project uses Arista eAPI to gather BGP peering and routing information from Arista switches and export it as a JSON file.
+
+Requirements
+
+Arista Switch:
+
+Ensure the switch is running EOS with eAPI enabled.
+Supported EOS version: ceos:4.33.1F (or later).
+Python Environment:
+
+Python 3.8 or later.
+Install the required Python libraries:
+pip install jsonrpclib
+
+
+
+
+##Network Access:
+
+Ensure the switch's management interface is reachable from the machine running the script.
+Setup
+
+## Enable eAPI on the Switch
+
+Run the following commands on the Arista switch to enable the API:
+
+
+
+enable
+configure terminal
+management api http-commands
+   no shutdown
+   protocol https
+      no shutdown
+   protocol http
+      no shutdown
+exit
+
+##Configure Username and Password
+
+
+configure terminal
+username admin privilege 15 secret NEW_PASSWORD
+write memory
+Replace NEW_PASSWORD with your desired password.
+

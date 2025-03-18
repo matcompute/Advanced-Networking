@@ -1,0 +1,39 @@
+hostname {{ router_name }}
+service routing protocols model multi-agent
+ip routing
+
+interface Loopback0
+ ip address {{ interfaces.Loopback0.ip }}
+ no shutdown
+
+{% for eth, details in interfaces.items() %}
+{% if eth != 'Loopback0' %}
+interface {{ eth }}
+ no switchport
+ ip address {{ details.ip }}
+ no shutdown
+{% endif %}
+{% endfor %}
+
+router bgp {{ bgp.as }}
+ bgp router-id {{ interfaces.Loopback0.ip.split('/')[0] }}
+{% for neighbor in bgp.neighbors %}
+ neighbor {{ neighbor.ip }} remote-as {{ neighbor.as }}
+ neighbor {{ neighbor.ip }} next-hop-self
+{% if neighbor.route_map is defined %}
+ neighbor {{ neighbor.ip }} route-map {{ neighbor.route_map }} in
+{% endif %}
+{% endfor %}
+{% for network in bgp.networks %}
+ network {{ network }}
+{% endfor %}
+
+{% if 'dhcp' in interfaces.values()|selectattr('dhcp')|list %}
+dhcp server
+{% for eth, details in interfaces.items() %}
+{% if 'dhcp' in details %}
+ subnet {{ details.dhcp.subnet }}
+ range {{ details.dhcp.range.start }} {{ details.dhcp.range.end }}
+{% endif %}
+{% endfor %}
+{% endif %}

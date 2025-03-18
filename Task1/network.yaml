@@ -1,0 +1,279 @@
+routers:
+  ASBR1:
+    interfaces:
+      Loopback0:
+        ip: 192.168.5.1/32
+      eth8:
+        ip: 10.1.2.2/30
+      eth9:
+        ip: 10.1.4.2/30
+      eth10:
+        ip: 10.1.6.1/30
+      eth11:
+        ip: 10.1.7.1/30
+    bgp:
+      as: 55010
+      neighbors:
+        - ip: 10.1.2.1
+          as: 55010
+        - ip: 10.1.4.1
+          as: 55010
+        - ip: 10.1.6.2
+          as: 55010
+        - ip: 10.1.7.2
+          as: 54020
+          route_map: PREFER_RX
+
+  ASBR2:
+    interfaces:
+      Loopback0:
+        ip: 192.168.6.1/32
+      eth20:
+        ip: 10.2.1.1/30
+      eth21:
+        ip: 10.2.2.1/30
+      eth22:
+        ip: 10.1.7.2/30
+    bgp:
+      as: 54020
+      neighbors:
+        - ip: 10.2.1.2
+          as: 54020
+        - ip: 10.2.2.2
+          as: 54020
+        - ip: 10.1.7.1
+          as: 55010
+
+  ASBR3:
+    interfaces:
+      Loopback0:
+        ip: 192.168.7.1/32
+      eth12:
+        ip: 10.1.3.2/30
+      eth13:
+        ip: 10.1.5.2/30
+      eth14:
+        ip: 10.1.6.2/30
+      eth15:
+        ip: 10.1.8.1/30
+    bgp:
+      as: 55010
+      neighbors:
+        - ip: 10.1.3.1
+          as: 55010
+        - ip: 10.1.5.1
+          as: 55010
+        - ip: 10.1.6.1
+          as: 55010
+        - ip: 10.1.8.2
+          as: 54030
+          route_map: PREFER_RX
+
+  ASBR4:
+    interfaces:
+      Loopback0:
+        ip: 192.168.8.1/32
+      eth40:
+        ip: 10.1.8.2/30
+      eth41:
+        ip: 10.5.2.1/30
+      eth42:
+        ip: 10.5.4.1/30
+    bgp:
+      as: 54030
+      neighbors:
+        - ip: 10.1.8.1
+          as: 55010
+        - ip: 10.5.2.2
+          as: 54030
+        - ip: 10.5.4.2
+          as: 54030
+
+  ASBR5:
+    interfaces:
+      Loopback0:
+        ip: 192.168.9.1/32
+      eth26:
+        ip: 10.2.2.2/30
+      eth27:
+        ip: 10.2.3.2/30
+      eth28:
+        ip: 10.3.1.1/30
+    bgp:
+      as: 54020
+      neighbors:
+        - ip: 10.2.2.1
+          as: 54020
+        - ip: 10.2.3.1
+          as: 54020
+        - ip: 10.3.1.2
+          as: 65000
+
+  ASBR6:
+    interfaces:
+      Loopback0:
+        ip: 192.168.10.1/32
+      eth61:
+        ip: 10.3.1.2/30
+      eth62:
+        ip: 10.4.1.1/30
+      eth63:
+        ip: 10.6.2.1/30
+    bgp:
+      as: 65000
+      neighbors:
+        - ip: 10.3.1.1
+          as: 54020
+        - ip: 10.4.1.2
+          as: 65000
+        - ip: 10.6.2.2
+          as: 65000
+
+  ASBR7:
+    interfaces:
+      Loopback0:
+        ip: 192.168.11.1/32
+      eth50:
+        ip: 10.5.3.2/30
+      eth51:
+        ip: 10.5.4.2/30
+      eth48:
+        ip: 10.6.1.1/30
+    bgp:
+      as: 54030
+      neighbors:
+        - ip: 10.5.3.1
+          as: 54030
+        - ip: 10.5.4.1
+          as: 54030
+        - ip: 10.6.1.2
+          as: 65000
+
+  ASBR8:
+    interfaces:
+      Loopback0:
+        ip: 192.168.12.1/32
+      eth66:
+        ip: 10.6.1.2/30
+      eth67:
+        ip: 10.5.1.2/30
+      eth68:
+        ip: 10.6.2.2/30
+    bgp:
+      as: 65000
+      neighbors:
+        - ip: 10.6.1.1
+          as: 54030
+        - ip: 10.5.1.1
+          as: 65000
+        - ip: 10.6.2.1
+          as: 65000
+
+  R1:
+    interfaces:
+      Loopback0:
+        ip: 192.168.1.1/32
+      eth1:
+        ip: 10.1.1.1/30
+      eth2:
+        ip: 10.1.2.1/30
+      eth3:
+        ip: 10.1.3.1/30
+    bgp:
+      as: 55010
+      neighbors:
+        - ip: 10.1.1.2
+          as: 55010
+        - ip: 10.1.2.2
+          as: 55010
+        - ip: 10.1.3.2
+          as: 55010
+
+  R2:
+    interfaces:
+      Loopback0:
+        ip: 192.168.2.1/32
+      eth4:
+        ip: 10.1.1.2/30
+      eth5:
+        ip: 10.1.4.1/30
+      eth6:
+        ip: 10.1.5.1/30
+      eth7:
+        ip: 192.168.10.1/24
+        dhcp:
+          subnet: 192.168.10.0/24
+          range:
+            start: 192.168.10.10
+            end: 192.168.10.99
+    bgp:
+      as: 55010
+      neighbors:
+        - ip: 10.1.1.1
+          as: 55010
+        - ip: 10.1.4.2
+          as: 55010
+        - ip: 10.1.5.2
+          as: 55010
+
+  R3:
+    interfaces:
+      Loopback0:
+        ip: 192.168.3.1/32
+      eth23:
+        ip: 10.2.1.2/30
+      eth24:
+        ip: 10.2.3.1/30
+      eth25:
+        ip: 192.168.20.1/24
+        dhcp:
+          subnet: 192.168.20.0/24
+          range:
+            start: 192.168.20.10
+            end: 192.168.20.99
+    bgp:
+      as: 54020
+      neighbors:
+        - ip: 10.2.1.1
+          as: 54020
+        - ip: 10.2.3.2
+          as: 54020
+
+  R4:
+    interfaces:
+      Loopback0:
+        ip: 192.168.4.1/32
+      eth43:
+        ip: 10.5.2.2/30
+      eth44:
+        ip: 10.5.3.1/30
+      eth45:
+        ip: 192.168.30.1/24
+        dhcp:
+          subnet: 192.168.30.0/24
+          range:
+            start: 192.168.30.10
+            end: 192.168.30.99
+    bgp:
+      as: 54030
+      neighbors:
+        - ip: 10.5.2.1
+          as: 54030
+        - ip: 10.5.3.2
+          as: 54030
+
+  Ri:
+    interfaces:
+      Loopback0:
+        ip: 192.168.13.1/32
+      eth64:
+        ip: 10.4.1.2/30
+      eth65:
+        ip: 10.5.1.1/30
+    bgp:
+      as: 65000
+      neighbors:
+        - ip: 10.4.1.1
+          as: 65000
+        - ip: 10.5.1.2
+          as: 65000

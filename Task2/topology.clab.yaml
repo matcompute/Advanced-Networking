@@ -1,0 +1,104 @@
+name: bgp
+topology:
+  nodes:
+    
+    R1:
+      kind: ceos
+      image: ceos:4.33.1F
+      startup-config: configs/R1_startup-config.cfg
+    R2:
+      kind: ceos
+      image: ceos:4.33.1F
+      startup-config: configs/R2_startup-config.cfg
+    R3:
+      kind: ceos
+      image: ceos:4.33.1F
+      startup-config: configs/R3_startup-config.cfg
+    R4:
+      kind: ceos
+      image: ceos:4.33.1F
+      startup-config: configs/R4_startup-config.cfg
+    Ri:
+      kind: ceos
+      image: ceos:4.33.1F
+      startup-config: configs/Ri_startup-config.cfg
+    ASBR1:
+      kind: ceos
+      image: ceos:4.33.1F
+      startup-config: configs/ASBR1_startup-config.cfg
+    ASBR2:
+      kind: ceos
+      image: ceos:4.33.1F
+      startup-config: configs/ASBR2_startup-config.cfg
+    ASBR3:
+      kind: ceos
+      image: ceos:4.33.1F
+      startup-config: configs/ASBR3_startup-config.cfg
+    ASBR4:
+      kind: ceos
+      image: ceos:4.33.1F
+      startup-config: configs/ASBR4_startup-config.cfg
+    ASBR5:
+      kind: ceos
+      image: ceos:4.33.1F
+      startup-config: configs/ASBR5_startup-config.cfg
+    ASBR6:
+      kind: ceos
+      image: ceos:4.33.1F
+      startup-config: configs/ASBR6_startup-config.cfg
+    ASBR7:
+      kind: ceos
+      image: ceos:4.33.1F
+      startup-config: configs/ASBR7_startup-config.cfg
+    ASBR8:
+      kind: ceos
+      image: ceos:4.33.1F
+      startup-config: configs/ASBR8_startup-config.cfg
+
+    # Hosts for DHCP testing
+    h1:
+      kind: linux
+      image: alpine:latest
+      exec:
+        - udhcpc -i eth1  
+    h2:
+      kind: linux
+      image: alpine:latest
+      exec:
+        - udhcpc -i eth2  
+    h3:
+      kind: linux
+      image: alpine:latest
+      exec:
+        - udhcpc -i eth3  
+
+  links:
+    # AS55010 (eth1-eth19)
+    - endpoints: ["R1:eth1", "R2:eth4"]          # R1 to R2 (iBGP)
+    - endpoints: ["R1:eth2", "ASBR1:eth8"]       # R1 to ASBR1 (iBGP)
+    - endpoints: ["R1:eth3", "ASBR3:eth12"]      # R1 to ASBR3 (iBGP)
+    - endpoints: ["R2:eth5", "ASBR1:eth9"]       # R2 to ASBR1 (iBGP)
+    - endpoints: ["R2:eth6", "ASBR3:eth13"]      # R2 to ASBR3 (iBGP)
+    - endpoints: ["R2:eth7", "h1:eth1"]          # R2 to h1 (direct connection)
+    - endpoints: ["ASBR1:eth10", "ASBR3:eth14"]  # ASBR1 to ASBR3 (iBGP)
+    - endpoints: ["ASBR1:eth11", "ASBR2:eth22"]  # ASBR1 to ASBR2 (eBGP)
+    - endpoints: ["ASBR3:eth15", "ASBR4:eth40"]  # ASBR3 to ASBR4 (eBGP)
+
+    # AS54020 (eth20-eth39)
+    - endpoints: ["ASBR2:eth20", "R3:eth23"]     # ASBR2 to R3 (iBGP)
+    - endpoints: ["ASBR2:eth21", "ASBR5:eth26"]  # ASBR2 to ASBR5 (iBGP)
+    - endpoints: ["R3:eth24", "ASBR5:eth27"]     # R3 to ASBR5 (iBGP)
+    - endpoints: ["R3:eth25", "h2:eth2"]         # R3 to h2 (direct connection)
+    - endpoints: ["ASBR5:eth28", "ASBR6:eth61"]  # ASBR5 to ASBR6 (eBGP)
+
+    # AS54030 (eth41-eth60)
+    - endpoints: ["ASBR4:eth41", "R4:eth43"]     # ASBR4 to R4 (iBGP)
+    - endpoints: ["ASBR4:eth42", "ASBR7:eth51"]  # ASBR4 to ASBR7 (iBGP)
+    - endpoints: ["R4:eth44", "ASBR7:eth50"]     # R4 to ASBR7 (iBGP)
+    - endpoints: ["R4:eth45", "h3:eth3"]         # R4 to h3 (direct connection)
+    - endpoints: ["ASBR7:eth48", "ASBR8:eth66"]  # ASBR7 to ASBR8 (eBGP)
+
+    # AS65000 (eth61-eth80)
+    - endpoints: ["ASBR6:eth62", "Ri:eth64"]     # ASBR6 to Ri (iBGP)
+    - endpoints: ["ASBR6:eth63", "ASBR8:eth68"]  # ASBR6 to ASBR8 (iBGP)
+    - endpoints: ["ASBR8:eth67", "Ri:eth65"]     # ASBR8 to Ri (iBGP)
